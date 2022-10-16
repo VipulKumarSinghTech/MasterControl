@@ -1,8 +1,8 @@
 package com.github.VipulKumarSinghTech.MasterControl.service;
 
-import java.util.List;
+import java.util.Map;
 
 public interface MasterControlService {
 
-    List<String> getIndex();
+    Map<String, String> getIndex();
 }

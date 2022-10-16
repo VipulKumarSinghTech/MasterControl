@@ -1,6 +1,7 @@
 package com.github.VipulKumarSinghTech.MasterControl.service.impl;
 
 import com.github.VipulKumarSinghTech.MasterControl.annotation.MasterControl;
+import com.github.VipulKumarSinghTech.MasterControl.exceptions.MasterControlException;
 import com.github.VipulKumarSinghTech.MasterControl.service.MasterControlService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.BeanDefinition;
@@ -9,9 +10,9 @@ import org.springframework.context.annotation.ScannedGenericBeanDefinition;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class MasterControlServiceImpl implements MasterControlService {
@@ -23,28 +24,43 @@ public class MasterControlServiceImpl implements MasterControlService {
     @Value("${admin.base.package:}")
     private String basePackage;
 
-    private static List<String> index;
+    private static Map<String, String> INDEX;
 
     @Override
-    public List<String> getIndex() {
-        if (index == null) {
+    public Map<String, String> getIndex() {
+        if (INDEX == null)
             initializeIndex();
-        }
-        return index;
+        return INDEX;
     }
 
     private void initializeIndex() {
         ClassPathScanningCandidateComponentProvider provider = new ClassPathScanningCandidateComponentProvider(false);
         provider.addIncludeFilter(new AnnotationTypeFilter(MasterControl.class));
-
         final Set<BeanDefinition> candidates = provider.findCandidateComponents(basePackage);
-        index = candidates.stream().map(BeanDefinition::getBeanClassName).collect(Collectors.toList());
 
-        candidates.forEach(candidate ->{
-            System.out.println(((ScannedGenericBeanDefinition) candidate)
-                    .getMetadata()
-                    .getAnnotationAttributes("com.github.VipulKumarSinghTech.MasterControl.annotation.MasterControl")
-                    .get("name"));
+        Map<String, String> indexMap = new HashMap<>();
+        candidates.forEach(candidate -> {
+            String className = candidate.getBeanClassName();
+            String key = getNameProperty(candidate, className);
+            if (indexMap.containsKey(key)) {
+                throw new MasterControlException("Duplicate name found in " + className);
+            } else {
+                indexMap.put(key, className);
+            }
         });
+
+        INDEX = indexMap;
+    }
+
+    private String getNameProperty(BeanDefinition candidate, String className) {
+        String name = ((ScannedGenericBeanDefinition) candidate)
+                .getMetadata()
+                .getAnnotationAttributes("com.github.VipulKumarSinghTech.MasterControl.annotation.MasterControl")
+                .get("name").toString();
+
+        if (name.trim().isEmpty())
+            name = className.substring(className.lastIndexOf('.') + 1);
+
+        return name;
     }
 }
