@@ -10,6 +10,8 @@ import org.springframework.context.annotation.ScannedGenericBeanDefinition;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -24,6 +26,9 @@ public class MasterControlServiceImpl implements MasterControlService {
     @Value("${admin.base.package:}")
     private String basePackage;
 
+    @PersistenceContext(unitName = "entityManagerFactory")
+    private EntityManager entityManager;
+
     private static Map<String, String> INDEX;
 
     @Override
@@ -31,6 +36,13 @@ public class MasterControlServiceImpl implements MasterControlService {
         if (INDEX == null)
             initializeIndex();
         return INDEX;
+    }
+
+    @Override
+    public Object findById(String key, Object id) throws ClassNotFoundException {
+        String className = getIndex().get(key);
+        Class<?> clazz = Class.forName(className);
+        return entityManager.find(clazz, id);
     }
 
     private void initializeIndex() {
