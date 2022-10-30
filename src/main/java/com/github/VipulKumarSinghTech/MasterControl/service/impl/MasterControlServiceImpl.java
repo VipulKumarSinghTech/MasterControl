@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -43,6 +44,13 @@ public class MasterControlServiceImpl implements MasterControlService {
         String className = getIndex().get(key);
         Class<?> clazz = Class.forName(className);
         return entityManager.find(clazz, id);
+    }
+
+    @Override
+    public List findAll(String key) throws ClassNotFoundException {
+        String className = getIndex().get(key);
+        Class<?> clazz = Class.forName(className);
+        return entityManager.createQuery("from " + clazz.getName()).getResultList();
     }
 
     private void initializeIndex() {
