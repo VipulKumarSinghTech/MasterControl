@@ -12,8 +12,8 @@ public interface MasterControlService {
 
     /**
      * @param key entity key
-     * @param id primary key
-     * @return queried object based on primary key 
+     * @param id  primary key
+     * @return queried object based on primary key
      * @throws ClassNotFoundException
      */
     Object findById(String key, Object id) throws ClassNotFoundException;
