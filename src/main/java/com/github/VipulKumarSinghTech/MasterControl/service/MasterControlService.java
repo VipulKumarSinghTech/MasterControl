@@ -25,4 +25,12 @@ public interface MasterControlService {
      */
     List<Object> findAll(String key) throws ClassNotFoundException;
 
+    /**
+     * @param key
+     * @param fieldValueMap
+     * @return
+     * @throws ReflectiveOperationException
+     */
+    Object createData(String key, Map<String, Object> fieldValueMap) throws ReflectiveOperationException;
+
 }

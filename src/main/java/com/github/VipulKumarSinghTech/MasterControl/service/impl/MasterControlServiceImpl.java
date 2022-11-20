@@ -37,6 +37,19 @@ public class MasterControlServiceImpl implements MasterControlService {
         return entityManager.createQuery("from " + clazz.getName()).getResultList();
     }
 
+    @Override
+    @Transactional
+    public Object createData(String key, Map<String, Object> fieldValueMap) throws ReflectiveOperationException {
+        Class<?> clazz = getClassByKey(key);
+        Constructor<?> cons = clazz.getConstructor();
+        Object object = cons.newInstance();
+
+        fillDataFromMap(fieldValueMap, clazz, object);
+
+        entityManager.persist(object);
+        return object;
+    }
+
 
 
     private Class<?> getClassByKey(String key) throws ClassNotFoundException {
