@@ -50,7 +50,17 @@ public class MasterControlServiceImpl implements MasterControlService {
         return object;
     }
 
+    @Override
+    @Transactional
+    public Object updateData(String key, Object id, Map<String, Object> fieldValueMap) throws ReflectiveOperationException {
+        Class<?> clazz = getClassByKey(key);
+        Object object = findById(key, id);
 
+        fillDataFromMap(fieldValueMap, clazz, object);
+
+        entityManager.merge(object);
+        return object;
+    }
 
     private Class<?> getClassByKey(String key) throws ClassNotFoundException {
         String className = getIndex().get(key);

@@ -28,9 +28,18 @@ public interface MasterControlService {
     /**
      * @param key
      * @param fieldValueMap
-     * @return
+     * @return created object
      * @throws ReflectiveOperationException
      */
     Object createData(String key, Map<String, Object> fieldValueMap) throws ReflectiveOperationException;
+
+    /**
+     * @param key
+     * @param id
+     * @param fieldValueMap
+     * @return upated object
+     * @throws ReflectiveOperationException
+     */
+    Object updateData(String key, Object id, Map<String, Object> fieldValueMap) throws ReflectiveOperationException;
 
 }
