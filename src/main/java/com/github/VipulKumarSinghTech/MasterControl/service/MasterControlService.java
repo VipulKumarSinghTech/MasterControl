@@ -42,4 +42,11 @@ public interface MasterControlService {
      */
     Object updateData(String key, Object id, Map<String, Object> fieldValueMap) throws ReflectiveOperationException;
 
+    /**
+     * @param key
+     * @param id
+     * @throws ReflectiveOperationException
+     */
+    void deleteById(String key, Object id) throws ReflectiveOperationException;
+
 }

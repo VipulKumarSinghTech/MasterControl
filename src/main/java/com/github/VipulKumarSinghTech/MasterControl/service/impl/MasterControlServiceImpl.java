@@ -62,6 +62,13 @@ public class MasterControlServiceImpl implements MasterControlService {
         return object;
     }
 
+    @Override
+    @Transactional
+    public void deleteById(String key, Object id) throws ReflectiveOperationException {
+        Object object = findById(key, id);
+        entityManager.remove(object);
+    }
+
     private Class<?> getClassByKey(String key) throws ClassNotFoundException {
         String className = getIndex().get(key);
         return Class.forName(className);
