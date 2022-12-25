@@ -43,11 +43,20 @@ public class MasterControlServiceImpl implements MasterControlService {
         Class<?> clazz = getClassByKey(key);
         Constructor<?> cons = clazz.getConstructor();
         Object object = cons.newInstance();
-
+        setId(clazz, object);
         fillDataFromMap(fieldValueMap, clazz, object);
 
         entityManager.persist(object);
         return object;
+    }
+
+    // TODO update this
+    private void setId(Class<?> clazz, Object object) throws ReflectiveOperationException {
+        Long value = 1L;
+
+        Field field = clazz.getDeclaredField("id");
+        field.setAccessible(true);
+        field.set(object, value);
     }
 
     @Override
