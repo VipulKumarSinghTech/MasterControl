@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.github.VipulKumarSinghTech</groupId>
 	<artifactId>MasterControl</artifactId>
-	<version>1.0</version>
+	<version>0.1</version>
 	<name>${project.groupId}:${project.artifactId}</name>
 	<url>https://github.com/VipulKumarSinghTech/MasterControl</url>
 	<description>A library to provide crud operations to any entity using annotations.</description>
@@ -130,6 +130,18 @@
 			<organization>com.github.VipulKumarSinghTech</organization>
 			<organizationUrl>https://github.com/VipulKumarSinghTech</organizationUrl>
 		</developer>
+		<developer>
+			<name>Vipul Kumar Singh</name>
+			<email>vipul24.9669@gmail.com</email>
+			<organization>com.github.VipulKumarSinghTech</organization>
+			<organizationUrl>https://github.com/VipulKumarSinghTech</organizationUrl>
+		</developer>
 	</developers>
+
+	<scm>
+		<connection>scm:git:git://github.com/VipulKumarSinghTech/MasterControl.git</connection>
+		<developerConnection>scm:git:ssh://github.com:VipulKumarSinghTech/MasterControl.git</developerConnection>
+		<url>http://github.com/VipulKumarSinghTech/MasterControl/tree/master</url>
+	</scm>
 
 </project>
