@@ -8,6 +8,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -39,24 +40,26 @@ public class MasterControlServiceImpl implements MasterControlService {
 
     @Override
     @Transactional
-    public Object createData(String key, Map<String, Object> fieldValueMap) throws ReflectiveOperationException {
+    public Object createData(String key, Object id, Map<String, Object> fieldValueMap) throws ReflectiveOperationException {
         Class<?> clazz = getClassByKey(key);
         Constructor<?> cons = clazz.getConstructor();
         Object object = cons.newInstance();
-        setId(clazz, object);
+        setId(clazz, object, id);
         fillDataFromMap(fieldValueMap, clazz, object);
 
         entityManager.persist(object);
         return object;
     }
 
-    // TODO update this
-    private void setId(Class<?> clazz, Object object) throws ReflectiveOperationException {
-        Long value = 1L;
-
-        Field field = clazz.getDeclaredField("id");
-        field.setAccessible(true);
-        field.set(object, value);
+    private void setId(Class<?> clazz, Object object, Object id) throws ReflectiveOperationException {
+        Field idField = Arrays.stream(clazz.getDeclaredFields())
+                .filter(field -> Arrays.stream(field.getDeclaredAnnotations())
+                        .anyMatch(annotation -> annotation.annotationType()
+                                .getName().equals("javax.persistence.Id")))
+                .findFirst()
+                .orElseThrow(() -> new ReflectiveOperationException("Id field not found!"));
+        idField.setAccessible(true);
+        idField.set(object, id);
     }
 
     @Override

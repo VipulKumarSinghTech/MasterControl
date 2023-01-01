@@ -35,7 +35,7 @@ public class MasterController {
 
     @PostMapping("create")
     public Object createData(@RequestBody RequestDto requestDto) throws ReflectiveOperationException {
-        return masterControlService.createData(requestDto.getKey(), requestDto.getFieldValueMap());
+        return masterControlService.createData(requestDto.getKey(), requestDto.getId(), requestDto.getFieldValueMap());
     }
 
     @PutMapping("update")
