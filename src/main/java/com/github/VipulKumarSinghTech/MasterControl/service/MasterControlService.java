@@ -27,12 +27,11 @@ public interface MasterControlService {
 
     /**
      * @param key           entity key
-     * @param id            priimary key for this entity
      * @param fieldValueMap field value map
      * @return created object
      * @throws ReflectiveOperationException throws exception if reflection operation failed
      */
-    Object createData(String key, Object id, Map<String, Object> fieldValueMap) throws ReflectiveOperationException;
+    Object createData(String key, Map<String, Object> fieldValueMap) throws ReflectiveOperationException;
 
     /**
      * @param key           entity key

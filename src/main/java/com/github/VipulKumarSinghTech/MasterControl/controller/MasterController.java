@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.Map;
 
 @RestController
@@ -20,19 +21,11 @@ public class MasterController {
         this.masterControlService = masterControlService;
     }
 
-    /**
-     * @return
-     */
     @GetMapping("index")
     public Map<String, String> getIndex() {
         return masterControlService.getIndex();
     }
 
-    /**
-     * @param listRequestDto
-     * @return
-     * @throws ClassNotFoundException
-     */
     @PostMapping("get")
     public ResponseEntity<?> getList(@RequestBody ListRequestDto listRequestDto) throws ClassNotFoundException {
         if (listRequestDto.getId() != null) {
@@ -41,21 +34,11 @@ public class MasterController {
         return ResponseEntity.ok(masterControlService.findAll(listRequestDto.getKey()));
     }
 
-    /**
-     * @param requestDto
-     * @return
-     * @throws ReflectiveOperationException
-     */
     @PostMapping("create")
     public Object createData(@RequestBody RequestDto requestDto) throws ReflectiveOperationException {
-        return masterControlService.createData(requestDto.getKey(), requestDto.getId(), requestDto.getFieldValueMap());
+        return masterControlService.createData(requestDto.getKey(), requestDto.getFieldValueMap());
     }
 
-    /**
-     * @param requestDto
-     * @return
-     * @throws ReflectiveOperationException
-     */
     @PutMapping("update")
     public Object updateData(@RequestBody RequestDto requestDto) throws ReflectiveOperationException {
         return masterControlService.updateData(
@@ -64,17 +47,10 @@ public class MasterController {
                 requestDto.getFieldValueMap());
     }
 
-    /**
-     * @param id
-     * @param key
-     * @return
-     * @throws ReflectiveOperationException
-     */
-    @DeleteMapping("delete/{id}")
-    public ResponseEntity<String> deleteById(@PathVariable("id") Object id,
-                                             @RequestParam String key) throws ReflectiveOperationException {
-        masterControlService.deleteById(key, id);
-        return ResponseEntity.ok("Deletion successful.");
+    @PutMapping("delete")
+    public ResponseEntity<Map<String, String>> deleteById(@RequestBody RequestDto requestDto) throws ReflectiveOperationException {
+        masterControlService.deleteById(requestDto.getKey(), requestDto.getId());
+        return ResponseEntity.ok(Collections.singletonMap("message", "Deletion of " + requestDto.getKey() + " with id " + requestDto.getId() + " successful."));
     }
 
 }
